@@ -10,6 +10,8 @@
 - [Docker Image Development and Management](#Docker-Image-Development-and-Management)
   - [Building the Docker Image](#Building-the-Docker-Image)
   - [Searching Images](#Searching-Images)
+  - [Image Tagging](#Image-Tagging)
+- [Interact with Python3](#Interact-with-Python3)
 - [FAQs](#FAQs)
 
 ## Overview
@@ -74,6 +76,28 @@ make build-image
 To list the available Docker images::
 ```
 make search-image
+```
+### Image Tagging
+By default, `makester` will tag the new Docker image with the current branch hash.  This provides a degree of uniqueness but is not very intuitive.  That's where the `tag-version` `Makefile` target can help.  To apply tag as per project tagging convention `<ubuntu-code>-<python3-version>-<image-release-number>`:
+```
+make tag-version
+```
+To tag the image as `latest`
+```
+make tag-latest
+```
+To tag the image main line (without the `<image-release-number>` that ensures the latest Ubuntu focal release:
+```
+make tag-main
+```
+## Interact with Python3
+To get the Python3 version:
+```
+make python-version
+```
+To start the Python3 interpreter:
+```
+make run
 ```
 ## FAQs
 **_Q. Why is the default make on macOS so old?_**
