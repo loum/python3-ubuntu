@@ -12,13 +12,5 @@ RUN apt-get update && apt-get install -y --no-install-recommends\
 
 RUN python -m pip install --user --no-cache-dir --upgrade pip
 
-ARG USER=user
-ARG GROUP=user
-RUN addgroup $GROUP && useradd -m --gid $GROUP --shell /bin/bash $USER
-
-WORKDIR /home/user
-
-USER $USER
-
 ENTRYPOINT [ "python3" ]
 CMD []

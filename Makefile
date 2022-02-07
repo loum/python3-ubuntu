@@ -39,7 +39,7 @@ python-version:
 
 help: makester-help docker-help python-venv-help
 	@echo "(Makefile)\n\
-  login                Login to container $(MAKESTER__CONTAINER_NAME) as user \"user\"\n\
-  python-version       Python3 version in running container $(MAKESTER__CONTAINER_NAME)\"\n"
+  login                Login to running container $(MAKESTER__CONTAINER_NAME) as user \"root\"\n\
+  python-version       Python3 version\"\n"
 
 .PHONY: help
