@@ -11,6 +11,7 @@
   - [Building the Docker Image](#Building-the-Docker-Image)
   - [Searching Images](#Searching-Images)
   - [Image Tagging](#Image-Tagging)
+  - [Building the Image with a different Python 3 version](#Building-the-Image-with-a-different-Python-3-version)
 - [Interact with Python3](#Interact-with-Python3)
 - [FAQs](#FAQs)
 
@@ -23,15 +24,15 @@ The image build process is based on [GitHub Python project's Docker build](https
 
 ## Quick Links
 - [Ubuntu](https://ubuntu.com/)
-- [Python](https://www.python.org/)
+- [Python 3](https://www.python.org/)
 
 ## Prerequisties
 - [Docker](https://docs.docker.com/install/)
 - [GNU make](<https://www.gnu.org/software/make/manual/make.html>)
 
 ### Upgrading GNU Make (macOS)
-Although the macOS machines provide a working GNU `make` it is too old to support the capabilities within the DevOps utilities 
-package, [makester](https://github.com/loum/makester).  Instead, it is recommended to upgrade to the GNU make version provided 
+Although the macOS machines provide a working GNU `make` it is too old to support the capabilities within the DevOps utilities
+package, [makester](https://github.com/loum/makester).  Instead, it is recommended to upgrade to the GNU make version provided
 by Homebrew.  Detailed instructions can be found at https://formulae.brew.sh/formula/make.  In short, to upgrade GNU make run:
 ```
 brew install make
@@ -66,7 +67,7 @@ make help
 ```
 ## Docker Image Development and Management
 ### Building the Image
-> **_NOTE:_** Ubuntu base image is [focal 20.04](https://github.com/tianon/docker-brew-ubuntu-core/blob/fc9c4ef6e3d4891577936f0b103331e79e1e8281/focal/Dockerfile)
+> **_NOTE:_** Ubuntu base image is [jammy 22.04](https://hub.docker.com/_/ubuntu)
 
 Build the image with:
 ```
@@ -90,6 +91,17 @@ To tag the image main line (without the `<image-release-number>` that ensures th
 ```
 make tag-main
 ```
+### Building the Image with a different Python 3 version
+During the image build, a fresh compile of the Python binaries is performed. In theory, any Python release under https://www.python.org/ftp/python/ can be used. You will need to supply the `PYTHON_MAJOR_MINOR_VERSION` and `PYTHON_RELEASE_VERSION` to the image build target. For example, to build an image with Python 3.10.4:
+```
+PYTHON_MAJOR_MINOR_VERSION=3.10 PYTHON_RELEASE_VERSION=4 make build-image
+```
+To validate the image runs as expected:
+```
+make run
+```
+On success this will drop you into the Python interpreter.
+
 ## Interact with Python3
 To get the Python3 version:
 ```
