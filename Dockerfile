@@ -1,5 +1,5 @@
 ARG UBUNTU_BASE_IMAGE
-ARG PYTHON3_VERSION=3.10.4
+ARG PYTHON3_VERSION
 
 FROM ubuntu:$UBUNTU_BASE_IMAGE AS builder
 
@@ -18,7 +18,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends\
  curl\
  libbz2-dev\
  pkg-config\
- ca-certificates
+ ca-certificates &&\
+ apt-get autoremove -yqq --purge &&\
+ rm -rf /var/lib/apt/lists/* &&\
+ rm -rf /var/log/*
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
@@ -43,16 +46,19 @@ ARG UBUNTU_BASE_IMAGE
 
 FROM ubuntu:$UBUNTU_BASE_IMAGE
 
-ARG PYTHON3_PIP
-RUN apt-get update && apt-get install -y --no-install-recommends\
- make\
- python3-pip=$PYTHON3_PIP &&\
- rm -rf /var/lib/apt/lists/*
+RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections &&\
+ apt-get update && apt-get install -y --no-install-recommends\
+ make &&\
+ apt-get autoremove -yqq --purge &&\
+ rm -rf /var/lib/apt/lists/* &&\
+ rm -rf /var/log/*
 
 ARG PYTHON3_VERSION
 WORKDIR /opt/python/$PYTHON3_VERSION
 COPY --from=builder /opt/python/$PYTHON3_VERSION .
-RUN update-alternatives --install /usr/bin/python python /opt/python/$PYTHON3_VERSION/bin/python3 1
+RUN update-alternatives --install /usr/local/bin/python python /opt/python/$PYTHON3_VERSION/bin/python3 1 &&\
+ update-alternatives --install /usr/local/bin/pip pip /opt/python/$PYTHON3_VERSION/bin/pip3 1 &&\
+ python -m pip install --user --no-cache-dir --upgrade pip
 
-ENTRYPOINT [ "python" ]
+ENTRYPOINT [ "/usr/local/bin/python" ]
 CMD []
