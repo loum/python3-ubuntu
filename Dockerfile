@@ -1,7 +1,9 @@
+# syntax=docker/dockerfile:1.4
+
 ARG UBUNTU_BASE_IMAGE
 ARG PYTHON3_VERSION
 
-FROM ubuntu:$UBUNTU_BASE_IMAGE AS builder
+FROM $UBUNTU_BASE_IMAGE AS builder
 
 RUN apt-get update && apt-get install -y --no-install-recommends\
  wget\
@@ -40,11 +42,11 @@ RUN ./configure\
 RUN make -j 6
 RUN make install
 
-### downloader layer end
+### builder layer end
 
 ARG UBUNTU_BASE_IMAGE
 
-FROM ubuntu:$UBUNTU_BASE_IMAGE
+FROM $UBUNTU_BASE_IMAGE AS main
 
 RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections &&\
  apt-get update && apt-get install -y --no-install-recommends\
