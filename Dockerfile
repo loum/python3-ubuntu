@@ -59,6 +59,7 @@ ARG PYTHON3_VERSION
 WORKDIR /opt/python/$PYTHON3_VERSION
 COPY --from=builder /opt/python/$PYTHON3_VERSION .
 RUN update-alternatives --install /usr/local/bin/python python /opt/python/$PYTHON3_VERSION/bin/python3 1 &&\
+ update-alternatives --install /usr/local/bin/python3 python3 /opt/python/$PYTHON3_VERSION/bin/python3 1 &&\
  update-alternatives --install /usr/local/bin/pip pip /opt/python/$PYTHON3_VERSION/bin/pip3 1 &&\
  python -m pip install --user --no-cache-dir --upgrade pip
 
