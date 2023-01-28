@@ -3,47 +3,46 @@
 
 MAKESTER__REPO_NAME := loum
 
+include makester/makefiles/makester.mk
+
+#
+# Makester overrides.
+#
+# Container image build.
 # Tagging convention used: <UBUNTU_CODE>-<PYTHON3-VERSION>-<MAKESTER__RELEASE_NUMBER>
 UBUNTU_CODE ?= jammy
 PYTHON_MAJOR_MINOR_VERSION ?= 3.11
 PYTHON_RELEASE_VERSION ?= 0
-PYTHON3_VERSION ?= $(PYTHON_MAJOR_MINOR_VERSION).$(PYTHON_RELEASE_VERSION)
-MAKESTER__VERSION ?= $(UBUNTU_CODE)-$(PYTHON3_VERSION)
-MAKESTER__RELEASE_NUMBER = 1
 
-include makester/makefiles/makester.mk
-include makester/makefiles/docker.mk
-include makester/makefiles/python-venv.mk
+PYTHON3_VERSION := $(PYTHON_MAJOR_MINOR_VERSION).$(PYTHON_RELEASE_VERSION)
+MAKESTER__VERSION := $(UBUNTU_CODE)-$(PYTHON3_VERSION)
+MAKESTER__RELEASE_NUMBER := 1
 
-UBUNTU_BASE_IMAGE := ubuntu:$(UBUNTU_CODE)-20221020
-
-MAKESTER__BUILD_COMMAND = $(DOCKER) build --rm\
- --no-cache\
- --build-arg UBUNTU_BASE_IMAGE=$(UBUNTU_BASE_IMAGE)\
+MAKESTER__BUILD_COMMAND = --rm --no-cache\
+ --build-arg UBUNTU_BASE_IMAGE=ubuntu:$(UBUNTU_CODE)-20221020\
  --build-arg PYTHON3_VERSION=$(PYTHON3_VERSION)\
  -t $(MAKESTER__IMAGE_TAG_ALIAS) .
 
+# Makester container image run command.
+CMD :=
 MAKESTER__CONTAINER_NAME := python3-ubuntu
-MAKESTER__RUN_COMMAND := $(DOCKER) run --rm -ti\
+MAKESTER__RUN_COMMAND := $(MAKESTER__DOCKER) run --rm -ti\
  --name $(MAKESTER__CONTAINER_NAME)\
- $(MAKESTER__SERVICE_NAME):$(UBUNTU_CODE)-$(PYTHON_MAJOR_MINOR_VERSION) $(CMD)
+ $(MAKESTER__SERVICE_NAME):$(HASH) $(CMD)
 
-MAKESTER__IMAGE_TARGET_TAG ?= $(HASH)
+#
+# Local Makefile targets.
+#
+# Initialise the development environment.
+init: py-venv-clear py-venv-init py-install-makester
 
-tag-major: MAKESTER__IMAGE_TARGET_TAG = $(UBUNTU_CODE)-$(PYTHON_MAJOR_MINOR_VERSION)
-tag-major: tag
-
-tag-rm-major: MAKESTER__IMAGE_TARGET_TAG = $(UBUNTU_CODE)-$(PYTHON_MAJOR_MINOR_VERSION)
-tag-rm-major: rmi
-
-init: clear-env makester-requirements
-
+# Container image command targets.
 python-version:
-	$(MAKE) run CMD=--version
+	$(MAKE) container-run CMD=--version
 
-help: makester-help docker-help python-venv-help
+help: makester-help
 	@echo "(Makefile)\n\
-  login                Login to running container $(MAKESTER__CONTAINER_NAME) as user \"root\"\n\
-  python-version       Python3 version\"\n"
+  init                 Build the local development environment\n\
+  python-version       Container run Python3 version\n"
 
 .PHONY: help
