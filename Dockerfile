@@ -48,6 +48,11 @@ ARG UBUNTU_BASE_IMAGE
 
 FROM $UBUNTU_BASE_IMAGE AS main
 
+ARG USER=user
+ARG GROUP=user
+
+RUN addgroup $GROUP && useradd -m --gid $GROUP --shell /bin/bash $USER
+
 RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections &&\
  apt-get update && apt-get install -y --no-install-recommends\
  make &&\
@@ -62,6 +67,9 @@ RUN update-alternatives --install /usr/local/bin/python python /opt/python/$PYTH
  update-alternatives --install /usr/local/bin/python3 python3 /opt/python/$PYTHON3_VERSION/bin/python3 1 &&\
  update-alternatives --install /usr/local/bin/pip pip /opt/python/$PYTHON3_VERSION/bin/pip3 1 &&\
  python -m pip install --user --no-cache-dir --upgrade pip
+ 
+USER $USER
+WORKDIR /home/$USER
 
 ENTRYPOINT [ "/usr/local/bin/python" ]
 CMD []
