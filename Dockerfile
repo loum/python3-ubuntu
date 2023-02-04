@@ -48,10 +48,11 @@ ARG UBUNTU_BASE_IMAGE
 
 FROM $UBUNTU_BASE_IMAGE AS main
 
+ARG UID=49899
 ARG USER=user
 ARG GROUP=user
 
-RUN addgroup $GROUP && useradd -m --gid $GROUP --shell /bin/bash $USER
+RUN addgroup $GROUP && useradd -m --uid $UID --gid $GROUP --shell /bin/bash $USER
 
 RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections &&\
  apt-get update && apt-get install -y --no-install-recommends\

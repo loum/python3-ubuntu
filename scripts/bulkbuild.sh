@@ -54,5 +54,5 @@ docker buildx build --platform linux/arm64,linux/amd64\
 docker buildx build --platform linux/arm64,linux/amd64\
  --push --rm --no-cache\
  --build-arg UBUNTU_BASE_IMAGE=ubuntu:jammy-$UBUNTU_BASE_IMAGE\
- --build-arg PYTHON3_VERSION=3.11.1\
- -t loum/python3-ubuntu:jammy-3.11.1 .
+ --build-arg PYTHON3_VERSION=3.11.0\
+ -t loum/python3-ubuntu:jammy-3.11.0 .
