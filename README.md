@@ -8,7 +8,7 @@
     - [Local Environment Maintenance](#local-environment-maintenance)
 - [Help](#Help)
 - [Docker Image Development and Management](#docker-image-development-and-management)
-  - [Building the Docker](#building-the-docker)
+  - [Building the Container Image](#building-the-container-image)
   - [Searching Images](#searching-images)
   - [Image Tagging](#image-tagging)
   - [Building the Image with a different Python 3 version](#building-the-image-with-a-different-python-3-version)
@@ -68,31 +68,46 @@ make help
 
 ## Docker Image Development and Management
 
-### Building the Image
+### Building the Container Image
 > **_NOTE:_** Ubuntu base image is [jammy 22.04](https://hub.docker.com/_/ubuntu)
 
 Build the image with:
 ```
 make image-buildx
 ```
+
+By default, the container image will build with the `user:group` combinatation `user:user`. The
+`user` `uid` is `49899`. It is possible to override these values during the container build
+process by providing values for the `Makefile` variables `IMAGE_UID`, `IMAGE_USER` and
+`IMAGE_GROUP`. This is demonstrated in the following `make` plan:
+```
+make -n IMAGE_UID=2000 IMAGE_USER=dodge IMAGE_GROUP=dodgier image-buildx
+```
+
 ### Searching Images
 To list the available Docker images::
 ```
 make image-search
 ```
+
 ### Image Tagging
-By default, `makester` will tag the new Docker image with the current branch hash. This provides a degree of uniqueness but is not very intuitive. That's where the `tag-version` `Makefile` target can help. To apply tag as per project tagging convention `<ubuntu-code>-<python3-version>-<image-release-number>`:
+By default, `makester` will tag the new Docker image with the current branch hash. This provides a degree of uniqueness but is not very intuitive. That is where the `tag-version` `Makefile` target can help. To apply tag as per project tagging convention `<ubuntu-code>-<python3-version>-<image-release-number>`:
 ```
 make image-tag-version
 ```
+Example output: `loum/python3-ubuntu:jammy-3.11.1-1`
+
 To tag the image as `latest`
 ```
 make image-tag-latest
 ```
+Example output: `loum/python3-ubuntu:latest`
+
 To tag the image main line (without the `<image-release-number>` that ensures the latest Ubuntu release:
 ```
-make image-tag-main
+make image-tag-major
 ```
+Example output: `loum/python3-jammy-3.11`
 
 ### Building the Image with a different Python 3 version
 During the image build, a fresh compile of the Python binaries is performed. In theory, any Python release under https://www.python.org/ftp/python/ can be used. You will need to supply the `PYTHON_MAJOR_MINOR_VERSION` and `PYTHON_RELEASE_VERSION` to the image build target. For example, to build an image with Python 3.10.4:
