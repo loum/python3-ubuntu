@@ -18,14 +18,15 @@ PYTHON3_VERSION := $(PYTHON_MAJOR_MINOR_VERSION).$(PYTHON_RELEASE_VERSION)
 MAKESTER__VERSION := $(UBUNTU_CODE)-$(PYTHON3_VERSION)
 MAKESTER__RELEASE_NUMBER := 1
 
-export UBUNTU_BASE_IMAGE ?= 20221130
+export UBUNTU_BASE_IMAGE_VERSION := 20230126
+export UBUNTU_BASE_IMAGE := ubuntu:$(UBUNTU_CODE)-$(UBUNTU_BASE_IMAGE_VERSION)
 
 IMAGE_UID ?= 49899
 IMAGE_USER ?= user
 IMAGE_GROUP ?= user
 
 MAKESTER__BUILD_COMMAND = --rm --no-cache\
- --build-arg UBUNTU_BASE_IMAGE=ubuntu:$(UBUNTU_CODE)-$(UBUNTU_BASE_IMAGE)\
+ --build-arg UBUNTU_BASE_IMAGE=$(UBUNTU_BASE_IMAGE)\
  --build-arg PYTHON3_VERSION=$(PYTHON3_VERSION)\
  --build-arg UID=$(IMAGE_UID)\
  --build-arg USER=$(IMAGE_USER)\
@@ -44,6 +45,10 @@ MAKESTER__RUN_COMMAND := $(MAKESTER__DOCKER) run --rm -ti\
 #
 # Initialise the development environment.
 init: py-venv-clear py-venv-init py-install-makester
+
+image-buik-build:
+	$(info ### Container image bulk build ...)
+	scripts/bulkbuild.sh
 
 image-pull-into-docker:
 	$(info ### Pulling local registry image $(MAKESTER__SERVICE_NAME):$(HASH) into docker)
@@ -76,6 +81,9 @@ python-version:
 help: makester-help
 	@echo "(Makefile)\n\
   init                 Build the local development environment\n\
+  image-bulk-build     Build all multi-platform container images\n\
+  image-tag-major      Tag image $(MAKESTER__SERVICE_NAME) \"$(UBUNTU_CODE)-$(PYTHON_MAJOR_MINOR_VERSION)\"\n\
+  image-tag-major-rm   Undo \"image-tag-major\"\n\
   multi-arch-build     Convenience target for multi-arch container image builds\n\
   python-version       Container run Python3 version\n"
 
