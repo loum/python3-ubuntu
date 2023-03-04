@@ -12,13 +12,13 @@ include makester/makefiles/makester.mk
 # Tagging convention used: <UBUNTU_CODE>-<PYTHON3-VERSION>-<MAKESTER__RELEASE_NUMBER>
 UBUNTU_CODE ?= jammy
 PYTHON_MAJOR_MINOR_VERSION ?= 3.11
-PYTHON_RELEASE_VERSION ?= 1
+PYTHON_RELEASE_VERSION ?= 2
 
 PYTHON3_VERSION := $(PYTHON_MAJOR_MINOR_VERSION).$(PYTHON_RELEASE_VERSION)
 MAKESTER__VERSION := $(UBUNTU_CODE)-$(PYTHON3_VERSION)
 MAKESTER__RELEASE_NUMBER := 1
 
-export UBUNTU_BASE_IMAGE_VERSION := 20230126
+export UBUNTU_BASE_IMAGE_VERSION := 20230301
 export UBUNTU_BASE_IMAGE := ubuntu:$(UBUNTU_CODE)-$(UBUNTU_BASE_IMAGE_VERSION)
 
 IMAGE_UID ?= 49899
@@ -31,7 +31,7 @@ MAKESTER__BUILD_COMMAND = --rm --no-cache\
  --build-arg UID=$(IMAGE_UID)\
  --build-arg USER=$(IMAGE_USER)\
  --build-arg GROUP=$(IMAGE_GROUP)\
- -t $(MAKESTER__IMAGE_TAG_ALIAS) .
+ --tag $(MAKESTER__IMAGE_TAG_ALIAS) .
 
 # Makester container image run command.
 CMD :=
@@ -46,7 +46,7 @@ MAKESTER__RUN_COMMAND := $(MAKESTER__DOCKER) run --rm -ti\
 # Initialise the development environment.
 init: py-venv-clear py-venv-init py-install-makester
 
-image-buik-build:
+image-bulk-build:
 	$(info ### Container image bulk build ...)
 	scripts/bulkbuild.sh
 
