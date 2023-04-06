@@ -2,6 +2,7 @@
 .DEFAULT_GOAL := help
 
 MAKESTER__REPO_NAME := loum
+MAKESTER__INCLUDES := py docker
 
 include makester/makefiles/makester.mk
 
