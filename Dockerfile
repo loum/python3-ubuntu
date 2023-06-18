@@ -56,7 +56,9 @@ RUN addgroup $GROUP && useradd -m --uid $UID --gid $GROUP --shell /bin/bash $USE
 
 RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections &&\
  apt-get update && apt-get install -y --no-install-recommends\
- make &&\
+ make\
+ gcc\
+ python3-dev &&\
  apt-get autoremove -yqq --purge &&\
  rm -rf /var/lib/apt/lists/* &&\
  rm -rf /var/log/*
