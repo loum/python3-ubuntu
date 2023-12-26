@@ -46,15 +46,15 @@ docker buildx build --platform linux/arm64,linux/amd64\
 docker buildx build --platform linux/arm64,linux/amd64\
  --push --rm --no-cache\
  --build-arg UBUNTU_BASE_IMAGE=$UBUNTU_BASE_IMAGE\
- --build-arg PYTHON3_VERSION=3.11.5\
- -t loum/python3-ubuntu:jammy-3.11.5 .
+ --build-arg PYTHON3_VERSION=3.11.6\
+ -t loum/python3-ubuntu:jammy-3.11.6 .
 
 docker buildx build --platform linux/arm64,linux/amd64\
  --push --rm --no-cache\
  --build-arg UBUNTU_BASE_IMAGE=$UBUNTU_BASE_IMAGE\
- --build-arg PYTHON3_VERSION=3.11.6\
+ --build-arg PYTHON3_VERSION=3.11.7\
  -t loum/python3-ubuntu:jammy-3.11\
- -t loum/python3-ubuntu:jammy-3.11.6\
+ -t loum/python3-ubuntu:jammy-3.11.7\
  -t loum/python3-ubuntu:latest .
 
 # Python 3.12 and latest.
@@ -62,6 +62,12 @@ docker buildx build --platform linux/arm64,linux/amd64\
  --push --rm --no-cache\
  --build-arg UBUNTU_BASE_IMAGE=$UBUNTU_BASE_IMAGE\
  --build-arg PYTHON3_VERSION=3.12.0\
+ -t loum/python3-ubuntu:jammy-3.12.0 .
+
+docker buildx build --platform linux/arm64,linux/amd64\
+ --push --rm --no-cache\
+ --build-arg UBUNTU_BASE_IMAGE=$UBUNTU_BASE_IMAGE\
+ --build-arg PYTHON3_VERSION=3.12.1\
  -t loum/python3-ubuntu:jammy-3.12\
- -t loum/python3-ubuntu:jammy-3.12.0\
+ -t loum/python3-ubuntu:jammy-3.12.1\
  -t loum/python3-ubuntu:latest .
