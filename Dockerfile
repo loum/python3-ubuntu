@@ -48,20 +48,21 @@ ARG UBUNTU_BASE_IMAGE
 
 FROM $UBUNTU_BASE_IMAGE AS main
 
+RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections &&\
+ apt-get update && apt-get install -y --no-install-recommends\
+ adduser\
+ gcc\
+ make\
+ python3-dev &&\
+ apt-get autoremove -yqq --purge &&\
+ rm -rf /var/lib/apt/lists/* &&\
+ rm -rf /var/log/*
+
 ARG UID=49899
 ARG USER=user
 ARG GROUP=user
 
 RUN addgroup $GROUP && useradd -m --uid $UID --gid $GROUP --shell /bin/bash $USER
-
-RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections &&\
- apt-get update && apt-get install -y --no-install-recommends\
- make\
- gcc\
- python3-dev &&\
- apt-get autoremove -yqq --purge &&\
- rm -rf /var/lib/apt/lists/* &&\
- rm -rf /var/log/*
 
 ARG PYTHON3_VERSION
 WORKDIR /opt/python/$PYTHON3_VERSION
