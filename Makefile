@@ -1,25 +1,29 @@
 .SILENT:
 .DEFAULT_GOAL := help
-
-MAKESTER__REPO_NAME := loum
-MAKESTER__INCLUDES := py docker
-
-include makester/makefiles/makester.mk
-
 #
 # Makester overrides.
 #
+MAKESTER__STANDALONE := true
+MAKESTER__INCLUDES := py docker
+MAKESTER__REPO_NAME := loum
+
+include $(HOME)/.makester/makefiles/makester.mk
+
 # Container image build.
 # Tagging convention used: <UBUNTU_CODE>-<PYTHON3-VERSION>-<MAKESTER__RELEASE_NUMBER>
-UBUNTU_CODE ?= noble
+ifndef UBUNTU_CODE
+  UBUNTU_CODE ?= noble
+endif
 PYTHON_MAJOR_MINOR_VERSION ?= 3.12
-PYTHON_RELEASE_VERSION ?= 5
+PYTHON_RELEASE_VERSION ?= 6
 
 PYTHON3_VERSION := $(PYTHON_MAJOR_MINOR_VERSION).$(PYTHON_RELEASE_VERSION)
 MAKESTER__VERSION := $(UBUNTU_CODE)-$(PYTHON3_VERSION)
 MAKESTER__RELEASE_NUMBER := 1
 
-export UBUNTU_BASE_IMAGE_VERSION := 20240801
+ifndef UBUNTU_BASE_IMAGE_VERSION
+  UBUNTU_BASE_IMAGE_VERSION := 20241011
+endif
 export UBUNTU_BASE_IMAGE := ubuntu:$(UBUNTU_CODE)-$(UBUNTU_BASE_IMAGE_VERSION)
 
 IMAGE_UID ?= 49899
@@ -48,8 +52,8 @@ MAKESTER__RUN_COMMAND := $(MAKESTER__DOCKER) run --rm -ti\
 init: py-venv-clear py-venv-init py-install-makester
 
 image-bulk-build:
-	$(info ### Container image bulk build ...)
-	scripts/bulkbuild.sh
+	$(info ### Container image bulk build ($(UBUNTU_CODE)) ...)
+	UBUNTU_CODE=$(UBUNTU_CODE) scripts/bulkbuild.sh
 
 image-pull-into-docker:
 	$(info ### Pulling local registry image $(MAKESTER__SERVICE_NAME):$(HASH) into docker)
