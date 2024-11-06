@@ -88,7 +88,7 @@ make help
 
 > \[!NOTE\]
 >
-> Ubuntu base image is [jammy 22.04](https://hub.docker.com/_/ubuntu)
+> Ubuntu base image is [noble 24.04](https://hub.docker.com/_/ubuntu)
 
 Build the image with:
 
@@ -121,7 +121,7 @@ By default, `makester` will tag the new Docker image with the current branch has
 make image-tag-version
 ```
 
-Example output: `loum/python3-ubuntu:jammy-3.11.1-1`
+Example output: `loum/python3-ubuntu:noble-3.11.1-1`
 
 To tag the image as `latest`
 
@@ -137,7 +137,7 @@ To tag the image main line (without the `<image-release-number>` that ensures th
 make image-tag-major
 ```
 
-Example output: `loum/python3-jammy-3.11`
+Example output: `loum/python3-noble-3.11`
 
 ### Building the image with a different Python 3 version
 
@@ -155,9 +155,9 @@ make container-run
 
 On success this will drop you into the Python interpreter.
 
-## Interact with Python3
+## Interact with `python3`
 
-To get the Python3 version:
+To get the `python3` version:
 
 ```
 make python-version
