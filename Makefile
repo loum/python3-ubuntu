@@ -15,14 +15,14 @@ ifndef UBUNTU_CODE
   UBUNTU_CODE ?= noble
 endif
 PYTHON_MAJOR_MINOR_VERSION ?= 3.13
-PYTHON_RELEASE_VERSION ?= 0
+PYTHON_RELEASE_VERSION ?= 1
 
 PYTHON3_VERSION := $(PYTHON_MAJOR_MINOR_VERSION).$(PYTHON_RELEASE_VERSION)
 MAKESTER__VERSION := $(UBUNTU_CODE)-$(PYTHON3_VERSION)
 MAKESTER__RELEASE_NUMBER := 1
 
 ifndef UBUNTU_BASE_IMAGE_VERSION
-  UBUNTU_BASE_IMAGE_VERSION := 20241011
+  UBUNTU_BASE_IMAGE_VERSION := 20241118.1
 endif
 export UBUNTU_BASE_IMAGE := ubuntu:$(UBUNTU_CODE)-$(UBUNTU_BASE_IMAGE_VERSION)
 
@@ -48,9 +48,6 @@ MAKESTER__RUN_COMMAND := $(MAKESTER__DOCKER) run --rm -ti\
 #
 # Local Makefile targets.
 #
-# Initialise the development environment.
-init: py-venv-clear py-venv-init py-install-makester
-
 image-bulk-build:
 	$(info ### Container image bulk build ($(UBUNTU_CODE)) ...)
 	UBUNTU_CODE=$(UBUNTU_CODE) scripts/bulkbuild.sh
@@ -85,7 +82,6 @@ python-version:
 
 help: makester-help
 	@echo "(Makefile)\n\
-  init                 Build the local development environment\n\
   image-bulk-build     Build all multi-platform container images\n\
   image-tag-major      Tag image $(MAKESTER__SERVICE_NAME) \"$(UBUNTU_CODE)-$(PYTHON_MAJOR_MINOR_VERSION)\"\n\
   image-tag-major-rm   Undo \"image-tag-major\"\n\
