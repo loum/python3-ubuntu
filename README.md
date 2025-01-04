@@ -6,7 +6,6 @@
 - [Getting Started](#getting-started)
   - [(macOS users only) upgrading GNU make](#macos-users-only-upgrading-gnu-make)
   - [Creating the local environment](#creating-the-local-environment)
-  - [Local environment maintenance](#local-environment-maintenance)
 - [Help](#help)
 - [Docker Image Development and Management](#docker-image-development-and-management)
   - [Building the container image](#building-the-container-image)
@@ -50,28 +49,16 @@ Get the code and change into the top level `git` project directory:
 git clone https://github.com/loum/python3-ubuntu.git && cd python3-ubuntu
 ```
 
-> \[!NOTE\]
+> [!NOTE]
 >
 > Run all commands from the top-level directory of the `git` repository.
 
 For first-time setup, get the [Makester project](https://github.com/loum/makester.git):
 
-```
-git submodule update --init
-```
-
 Initialise the environment:
 
 ```
 make init
-```
-
-#### Local environment maintenance
-
-Keep [Makester project](https://github.com/loum/makester.git) up-to-date with:
-
-```
-git submodule update --remote --merge
 ```
 
 ## Help
@@ -86,7 +73,7 @@ make help
 
 ### Building the container image
 
-> \[!NOTE\]
+> [!NOTE]
 >
 > Ubuntu base image is [noble 24.04](https://hub.docker.com/_/ubuntu)
 
